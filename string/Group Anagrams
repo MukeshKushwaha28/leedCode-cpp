@@ -1,0 +1,78 @@
+Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+
+An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase, typically using all the original letters exactly once.
+
+ 
+
+Example 1:
+
+Input: strs = ["eat","tea","tan","ate","nat","bat"]
+Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+Example 2:
+
+Input: strs = [""]
+Output: [[""]]
+Example 3:
+
+Input: strs = ["a"]
+Output: [["a"]]
+ 
+
+Constraints:
+
+1 <= strs.length <= 104
+0 <= strs[i].length <= 100
+strs[i] consists of lowercase English letters.
+
+
+
+
+
+**********************************************************************************************************
+
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+
+
+     vector<pair<string,string>>v1;
+      int n = strs.size();
+
+      for(int i = 0;i<n;i++)
+      {
+         string s = strs[i];
+          sort(s.begin(),s.end()); 
+          string p = s;
+
+         
+        v1.push_back({p,strs[i]});
+      }
+     
+      sort(v1.begin(),v1.end());
+      
+       vector<vector<string>> v2;
+      //  vector<string>v3;
+     for(int i = 0;i<v1.size();i++)
+     { vector<string>v3;
+        int k = 0;
+        
+        for(int j = i;j<v1.size();j++)
+        {
+          if(v1[i].first == v1[j].first)
+          {
+             v3.push_back(v1[j].second);
+             k++;
+          }
+             else
+             break;
+        }
+        i=i+k-1;
+        v2.push_back(v3);
+     }
+      
+
+   
+    return v2;
+      
+    }
+};
