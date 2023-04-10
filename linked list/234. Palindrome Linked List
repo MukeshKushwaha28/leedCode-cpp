@@ -1,0 +1,114 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+ 
+  int lenght(ListNode* head)
+  {
+      int c = 0;
+      ListNode * temp = head;
+
+      while(temp != NULL)
+      {
+          c++;
+          temp = temp->next;
+      }
+
+      return c;
+  }
+
+ ListNode* Even(ListNode* head) {
+        
+        ListNode* cur = head;
+        ListNode* pre = NULL;
+        ListNode* node;
+        
+        while(cur != NULL)
+        {
+            node = cur->next;
+            cur->next = pre;
+            pre= cur;
+            cur = node;
+        }
+        
+        head = pre;
+        return head;
+    }
+  
+    bool isPalindrome(ListNode* head) {
+        
+        int n = lenght(head);
+        cout<<n;
+        
+        if(n%2==0)
+        {
+            ListNode * temp = head;
+            ListNode * prev;
+            int r = n/2;
+            while(r!=0)
+            {
+               r--;
+               prev = temp;
+               temp = temp->next;
+            }
+
+            ListNode* even = Even(temp);
+
+            ListNode* p = even; 
+              ListNode* q = head;
+
+              while(p !=NULL)
+              {
+                  if(p->val != q->val)
+                    {
+                        return false;
+                    }
+
+                    p = p->next;
+                    q = q->next;
+              }
+        }
+        else
+        {
+            ListNode * temp = head;
+            ListNode * prev;
+            int r = (n/2)+1;
+            
+            while(r!=0)
+            {
+               r--;
+               prev = temp;
+               temp = temp->next;
+            }
+
+            ListNode* even = Even(temp);
+             ListNode* p = even; 
+              ListNode* q = head;
+
+              while(p !=NULL)
+              {
+                  if(p->val != q->val)
+                    {
+                        return false;
+                    }
+
+                    p = p->next;
+                    q = q->next;
+              }
+               
+               
+
+        }
+
+        return true;
+
+    }
+};
