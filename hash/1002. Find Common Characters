@@ -1,0 +1,107 @@
+Given a string array words, return an array of all characters that show up in all strings within the words (including duplicates). You may return the answer in any order.
+
+ 
+
+Example 1:
+
+Input: words = ["bella","label","roller"]
+Output: ["e","l","l"]
+Example 2:
+
+Input: words = ["cool","lock","cook"]
+Output: ["c","o"]
+ 
+
+Constraints:
+
+1 <= words.length <= 100
+1 <= words[i].length <= 100
+words[i] consists of lowercase English letters.
+
+
+
+
+
+*****************************************************
+class Solution {
+public:
+    vector<string> commonChars(vector<string>& words) {
+        
+        unordered_map<char,int>m;
+         string s1 = words[0];
+
+              
+         for(int i = 0;i<s1.size();i++) m[s1[i]]++;
+         
+          if(words.size() ==1)
+          {
+              vector<string>v;
+
+              string a = words[0];
+               for(int i = 0;i<a.size();i++) 
+               { 
+                   string b = to_string(a[i]);
+                  v.push_back(b);
+                  return v;
+               }
+               return v;
+          }
+
+
+         
+         string ans = "";           
+         for(int i = 1;i<words.size();i++)
+         {
+             unordered_map<char,int>m1;
+
+             for(int j = 0;j<words[i].size();j++)
+             {
+                 char a = words[i][j];
+                 m1[a]++;
+             }
+             
+             string s = "";
+             for(auto it :m)
+             {
+                 char a = it.first;
+              
+                 if(m1.count(a))
+                 {
+                     int b = min(m[a],m1[a]);
+
+                     while(b)
+                     {
+                        //  cout<<a<<" ";
+                         s+=a;
+                         b--;
+                     }
+                 }
+             }
+
+             m.clear();
+             m1.clear();
+           
+            //   cout<<s<<" ";
+              ans = s;
+             
+            
+            //   unordered_map<char,int>m;
+             for(int i = 0;i<s.size();i++) m[s[i]]++;
+             
+         }
+
+         cout<<ans<<" ";
+         vector<string>v;
+          
+          for(int i = 0;i<ans.size();i++)
+          {
+              string a = "";
+              a+=ans[i];
+              v.push_back(a);
+             
+          }
+         return v;
+
+
+    }
+};
