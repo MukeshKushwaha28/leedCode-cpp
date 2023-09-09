@@ -1,0 +1,78 @@
+Given an array of distinct integers nums and a target integer target, return the number of possible combinations that add up to target.
+
+The test cases are generated so that the answer can fit in a 32-bit integer.
+
+ 
+
+Example 1:
+
+Input: nums = [1,2,3], target = 4
+Output: 7
+Explanation:
+The possible combination ways are:
+(1, 1, 1, 1)
+(1, 1, 2)
+(1, 2, 1)
+(1, 3)
+(2, 1, 1)
+(2, 2)
+(3, 1)
+Note that different sequences are counted as different combinations.
+Example 2:
+
+Input: nums = [9], target = 3
+Output: 0
+ 
+
+Constraints:
+
+1 <= nums.length <= 200
+1 <= nums[i] <= 1000
+All the elements of nums are unique.
+1 <= target <= 1000
+
+
+
+
+****************************************
+class Solution {
+public:
+    static const int MAX_TARGET = 1010; // Maximum possible target value
+    int dp[MAX_TARGET]; // Array to store computed results
+
+    int countCombinations(vector<int> nums, int remainingTarget) {
+        // If the remaining target is 0, there's one valid combination.
+        if (remainingTarget == 0)
+            return 1;
+        
+        // If the remaining target becomes negative, it's not possible to reach it.
+        if (remainingTarget < 0)
+            return 0;
+        
+        // If the result for 'remainingTarget' is already computed, return it.
+        if (~dp[remainingTarget])
+            return dp[remainingTarget];
+        
+        int currentCombinations = 0;
+        
+        // Iterate through the numbers in 'nums'.
+        for (int i = 0; i < nums.size(); i++) {
+            int currentNum = nums[i];
+            // recursively calculate combinations for the new target.
+            currentCombinations += countCombinations(nums, remainingTarget - currentNum);
+        }
+        
+        // Store and return the computed result.
+        return dp[remainingTarget] = currentCombinations;
+    }
+
+    int combinationSum4(vector<int>& nums, int target) {
+        // Initialize the 'dp' array with -1 to indicate uncomputed results.
+        for (int i = 0; i < MAX_TARGET; i++) {
+            dp[i] = -1;
+        }
+        
+        // Start the combination count calculation.
+        return countCombinations(nums, target);
+    }
+};
