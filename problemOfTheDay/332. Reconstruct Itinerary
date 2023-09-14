@@ -1,0 +1,69 @@
+You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and the arrival airports of one flight. Reconstruct the itinerary in order and return it.
+
+All of the tickets belong to a man who departs from "JFK", thus, the itinerary must begin with "JFK". If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string.
+
+For example, the itinerary ["JFK", "LGA"] has a smaller lexical order than ["JFK", "LGB"].
+You may assume all tickets form at least one valid itinerary. You must use all the tickets once and only once.
+
+ 
+
+Example 1:
+
+
+Input: tickets = [["MUC","LHR"],["JFK","MUC"],["SFO","SJC"],["LHR","SFO"]]
+Output: ["JFK","MUC","LHR","SFO","SJC"]
+Example 2:
+
+
+Input: tickets = [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
+Output: ["JFK","ATL","JFK","SFO","ATL","SFO"]
+Explanation: Another possible reconstruction is ["JFK","SFO","ATL","JFK","ATL","SFO"] but it is larger in lexical order.
+ 
+
+Constraints:
+
+1 <= tickets.length <= 300
+tickets[i].length == 2
+fromi.length == 3
+toi.length == 3
+fromi and toi consist of uppercase English letters.
+fromi != toi
+
+
+
+
+**************************************
+class Solution {
+    // Depth-first search function to find the itinerary
+    void dfs(unordered_map<string, multiset<string>>& adj, vector<string>& result, string s){
+        // While there are destinations connected to the current airport
+        while(adj[s].size()){
+            // Get the next destination
+            string v = *(adj[s].begin());
+            // Remove this destination from the list
+            adj[s].erase(adj[s].begin());
+            // Recursively explore this destination
+            dfs(adj, result, v);
+        }
+        // Add the current airport to the result
+        result.push_back(s);
+    }
+public:
+    // Main function to find the itinerary
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        // Create an adjacency list to represent the flights
+        unordered_map<string, multiset<string>> adj;
+        for(vector<string>& t: tickets)
+            // Add each destination to the multiset connected to its source airport
+            adj[t[0]].insert(t[1]);
+        
+        // Initialize the result vector
+        vector<string> result;
+        // Start the depth-first search from JFK (John F. Kennedy International Airport)
+        dfs(adj, result, "JFK");
+        // Reverse the result to get the correct itinerary
+        reverse(result.begin(), result.end());
+        // Return the itinerary
+        return result;
+    }
+};
