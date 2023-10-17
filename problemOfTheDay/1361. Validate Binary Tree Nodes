@@ -1,0 +1,110 @@
+You have n binary tree nodes numbered from 0 to n - 1 where node i has two children leftChild[i] and rightChild[i], return true if and only if all the given nodes form exactly one valid binary tree.
+
+If node i has no left child then leftChild[i] will equal -1, similarly for the right child.
+
+Note that the nodes have no values and that we only use the node numbers in this problem.
+
+ 
+
+Example 1:
+
+
+Input: n = 4, leftChild = [1,-1,3,-1], rightChild = [2,-1,-1,-1]
+Output: true
+Example 2:
+
+
+Input: n = 4, leftChild = [1,-1,3,-1], rightChild = [2,3,-1,-1]
+Output: false
+Example 3:
+
+
+Input: n = 2, leftChild = [1,0], rightChild = [-1,-1]
+Output: false
+ 
+
+Constraints:
+
+n == leftChild.length == rightChild.length
+1 <= n <= 104
+-1 <= leftChild[i], rightChild[i] <= n - 1
+
+
+
+
+
+***********************************************
+class Solution {
+public:
+    bool validateBinaryTreeNodes(int n, vector<int>& leftChild, vector<int>& rightChild) { 
+        
+        // CREATE A GRAPH
+       
+        vector<vector<int>> graph(n); 
+        
+        //NUMBER OF EDGES IN GRAPH
+        int edge = 0; 
+        
+        for(int i = 0; i < n; i++) {   
+            if(leftChild[i] != -1) {
+                graph[i].push_back(leftChild[i]);   
+                ++edge;
+            } 
+            if(rightChild[i] != -1) { 
+                graph[i].push_back(rightChild[i]); 
+                ++edge;
+            } 
+        }
+        
+        //CHECK FOR SELF LOOPS AND CYCLES
+        queue<int> q; 
+        vector<bool> visited(n, false); 
+        vector<int> indegree(n, 0); 
+        int ctr = 0; 
+        
+        for(int i = 0; i < graph.size(); i++) { 
+            for(int j = 0; j < graph[i].size(); j++) { 
+                indegree[graph[i][j]]++;
+            }
+        } 
+        
+        for(int i = 0; i < indegree.size(); i++) {  
+            
+            //NODE SHOULD HAVE EITHER ZERO OR ONE AS INDEGREE 
+            
+            if(indegree[i] > 1) { 
+                return false;
+            }
+            if(indegree[i] == 0) { 
+                q.push(i); 
+                ctr++;
+            }
+        } 
+        
+        while(!q.empty()) { 
+            int front = q.front(); 
+            visited[front] = true; 
+            q.pop(); 
+            
+            for(int i : graph[front]) { 
+                
+                indegree[i]--;
+                
+                if(!visited[i] && indegree[i] == 0) { 
+                    q.push(i); 
+                    ctr++;
+                }
+            }
+        } 
+        
+        //IF CYCLES ARE PRESENT OR EDGES ARE NOT EQUAL TO N-1 RETURN FALSE 
+        
+        if(ctr != n || edge != n-1) { 
+            return false;
+        }  
+        
+        //ELSE RETURN TRUE 
+        
+        return true;
+    }
+};
